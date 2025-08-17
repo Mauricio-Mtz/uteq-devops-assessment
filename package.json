@@ -1,12 +1,27 @@
 {
-  "name": "evaluation",
-  "version": "1.0.0",
+  "name": "uteq-devops-assessment",
+  "version": "1.0.1",
+  "description": "UTEQ DevOps assessment: Complete CI/CD pipeline with Docker, GitHub Actions & GCP deployment",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "devops",
+    "cicd",
+    "docker",
+    "github-actions",
+    "google-cloud",
+    "nodejs",
+    "uteq"
+  ],
+  "author": "Mauricio Martínez Rodríguez",
   "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  }
 }
