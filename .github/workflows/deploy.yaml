@@ -3,9 +3,9 @@ name: Deploy to Google Cloud Run
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, production ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, production ]
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -48,7 +48,7 @@ jobs:
     name: Build and Deploy to Cloud Run
     runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/production'
     
     steps:
     - name: Checkout code
