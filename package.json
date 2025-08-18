@@ -1,6 +1,6 @@
 {
   "name": "uteq-devops-assessment",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "UTEQ DevOps assessment: Complete CI/CD pipeline with Docker, GitHub Actions & GCP deployment",
   "main": "index.js",
   "type": "module",
