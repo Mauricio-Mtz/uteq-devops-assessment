@@ -3,11 +3,10 @@
   "version": "1.1.0",
   "description": "UTEQ DevOps assessment: Complete CI/CD pipeline with Docker, GitHub Actions & GCP deployment",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "devops",
@@ -23,5 +22,12 @@
   "dependencies": {
     "dotenv": "^17.2.1",
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

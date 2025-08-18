@@ -1,5 +1,5 @@
-import express from 'express';
-import 'dotenv/config';
+const express = require('express');
+require('dotenv').config();
 
 const app = express();
 
@@ -86,7 +86,6 @@ app.get('/comics', (req, res) => {
   const { genre, publisher, inStock } = req.query;
   let filteredComics = [...comics];
 
-  // Apply filters if provided
   if (genre) {
     filteredComics = filteredComics.filter(comic => 
       comic.genre.toLowerCase().includes(genre.toLowerCase())
@@ -118,7 +117,6 @@ app.get('/comics', (req, res) => {
 app.post('/comics', (req, res) => {
   const { title, author, publisher, year, genre, description, price, inStock } = req.body;
   
-  // Basic validation
   if (!title || !author || !publisher) {
     return res.status(400).json({
       success: false,
@@ -210,7 +208,6 @@ app.put('/comics/:id', (req, res) => {
 
   const { title, author, publisher, year, genre, description, price, inStock } = req.body;
 
-  // Validation for update
   if (year && (year < 1900 || year > new Date().getFullYear() + 1)) {
     return res.status(400).json({
       success: false,
@@ -225,7 +222,6 @@ app.put('/comics/:id', (req, res) => {
     });
   }
 
-  // Update only provided fields
   const updatedComic = {
     ...comics[comicIndex],
     ...(title && { title }),
@@ -285,4 +281,4 @@ app.listen(PORT, () => {
   console.log(`Comics API: http://localhost:${PORT}/comics`);
 });
 
-export default app;
+module.exports = app;
