@@ -3,22 +3,21 @@ const app = require('../index.js');
 
 describe('Comics API', () => {
   
-  // Variable para almacenar un ID válido de MongoDB
   let validComicId;
   
-  // Configuración antes de todos los tests
+  // Setup before all tests
   beforeAll(async () => {
-    // Esperar un momento para que la conexión a MongoDB esté lista
+    // Wait for MongoDB connection to be ready
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Obtener un comic existente para usar su ID en los tests
+    // Get an existing comic ID for testing
     const response = await request(app).get('/comics');
     if (response.body.data && response.body.data.length > 0) {
       validComicId = response.body.data[0]._id;
     }
   });
 
-  // Tests para el endpoint de salud
+  // Health endpoint tests
   describe('GET /health', () => {
     it('should return health status', async () => {
       const response = await request(app)
@@ -31,7 +30,7 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para obtener todos los comics
+  // Get all comics tests
   describe('GET /comics', () => {
     it('should return all comics', async () => {
       const response = await request(app)
@@ -79,7 +78,7 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para crear un nuevo comic
+  // Create new comic tests
   describe('POST /comics', () => {
     it('should create a new comic with valid data', async () => {
       const newComic = {
@@ -101,7 +100,7 @@ describe('Comics API', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data.title).toBe(newComic.title);
       expect(response.body.data.author).toBe(newComic.author);
-      expect(response.body.data._id).toBeDefined(); // MongoDB usa _id
+      expect(response.body.data._id).toBeDefined();
       expect(response.body.data.createdAt).toBeDefined();
     });
 
@@ -126,7 +125,6 @@ describe('Comics API', () => {
     it('should return error when missing required fields', async () => {
       const incompleteComic = {
         title: 'Incomplete Comic'
-        // Missing author and publisher
       };
 
       const response = await request(app)
@@ -143,7 +141,7 @@ describe('Comics API', () => {
         title: 'Invalid Comic',
         author: 'Test Author',
         publisher: 'Test Publisher',
-        year: 1800 // Invalid year
+        year: 1800
       };
 
       const response = await request(app)
@@ -160,7 +158,7 @@ describe('Comics API', () => {
         title: 'Invalid Comic',
         author: 'Test Author',
         publisher: 'Test Publisher',
-        price: -10 // Invalid negative price
+        price: -10
       };
 
       const response = await request(app)
@@ -173,7 +171,7 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para obtener comic por ID
+  // Get comic by ID tests
   describe('GET /comics/:id', () => {
     it('should return comic by valid ID', async () => {
       if (!validComicId) {
@@ -191,7 +189,6 @@ describe('Comics API', () => {
     });
 
     it('should return 404 for non-existent comic', async () => {
-      // ID válido de MongoDB pero que no existe (24 caracteres hex)
       const fakeId = '507f1f77bcf86cd799439011';
       const response = await request(app)
         .get(`/comics/${fakeId}`)
@@ -211,7 +208,7 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para actualizar comic
+  // Update comic tests
   describe('PUT /comics/:id', () => {
     it('should update comic with valid data', async () => {
       if (!validComicId) {
@@ -262,10 +259,10 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para eliminar comic
+  // Delete comic tests
   describe('DELETE /comics/:id', () => {
     it('should delete comic by valid ID', async () => {
-      // First create a comic to delete
+      // Create a comic to delete
       const createResponse = await request(app)
         .post('/comics')
         .send({
@@ -274,9 +271,9 @@ describe('Comics API', () => {
           publisher: 'Test Publisher'
         });
       
-      const comicId = createResponse.body.data._id; // MongoDB usa _id
+      const comicId = createResponse.body.data._id;
 
-      // Then delete it
+      // Delete the comic
       const deleteResponse = await request(app)
         .delete(`/comics/${comicId}`)
         .expect(200);
@@ -284,7 +281,7 @@ describe('Comics API', () => {
       expect(deleteResponse.body.success).toBe(true);
       expect(deleteResponse.body.message).toContain('deleted successfully');
       
-      // Verify it's actually deleted
+      // Verify comic is deleted
       await request(app)
         .get(`/comics/${comicId}`)
         .expect(404);
@@ -310,7 +307,7 @@ describe('Comics API', () => {
     });
   });
 
-  // Tests para el endpoint raíz
+  // Root endpoint test
   describe('GET /', () => {
     it('should return API information', async () => {
       const response = await request(app)
