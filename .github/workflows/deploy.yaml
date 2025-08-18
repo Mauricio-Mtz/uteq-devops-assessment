@@ -36,6 +36,11 @@ jobs:
         npm install --save-dev jest supertest
     
     - name: Run tests
+      timeout-minutes: 5
+      env:
+        NODE_ENV: test
+        CI: true
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}  # ← Agregar esta línea
       run: |
         npm test -- --forceExit
     

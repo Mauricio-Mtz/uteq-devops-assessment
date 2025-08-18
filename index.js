@@ -28,12 +28,12 @@ const comicSchema = new mongoose.Schema({
   price: { type: Number, default: 0 },
   inStock: { type: Boolean, default: true }
 }, {
-  timestamps: true // Agrega createdAt y updatedAt automáticamente
+  timestamps: true
 });
 
 const Comic = mongoose.model('Comic', comicSchema);
 
-// Seed data (solo si no hay comics en la base)
+// Initialize database with seed data if empty
 const seedComics = async () => {
   try {
     const count = await Comic.countDocuments();
@@ -78,10 +78,9 @@ const seedComics = async () => {
   }
 };
 
-// Initialize seed data
 seedComics();
 
-// Health endpoint required for Cloud Run
+// Health check endpoint
 app.get('/health', async (req, res) => {
   try {
     const totalComics = await Comic.countDocuments();
@@ -123,14 +122,14 @@ app.get('/', (req, res) => {
   });
 });
 
-// GET all comics
+// GET all comics with optional filtering
 app.get('/comics', async (req, res) => {
   try {
     const { genre, publisher, inStock } = req.query;
     let filter = {};
 
     if (genre) {
-      filter.genre = new RegExp(genre, 'i'); // Case insensitive
+      filter.genre = new RegExp(genre, 'i');
     }
     
     if (publisher) {
@@ -164,6 +163,7 @@ app.post('/comics', async (req, res) => {
   try {
     const { title, author, publisher, year, genre, description, price, inStock } = req.body;
     
+    // Validate required fields
     if (!title || !author || !publisher) {
       return res.status(400).json({
         success: false,
@@ -171,6 +171,7 @@ app.post('/comics', async (req, res) => {
       });
     }
 
+    // Validate year range
     if (year && (year < 1900 || year > new Date().getFullYear() + 1)) {
       return res.status(400).json({
         success: false,
@@ -178,6 +179,7 @@ app.post('/comics', async (req, res) => {
       });
     }
 
+    // Validate price range
     if (price && (price < 0 || price > 1000)) {
       return res.status(400).json({
         success: false,
@@ -258,6 +260,7 @@ app.put('/comics/:id', async (req, res) => {
 
     const { year, price } = req.body;
 
+    // Validate year if provided
     if (year && (year < 1900 || year > new Date().getFullYear() + 1)) {
       return res.status(400).json({
         success: false,
@@ -265,6 +268,7 @@ app.put('/comics/:id', async (req, res) => {
       });
     }
 
+    // Validate price if provided
     if (price && (price < 0 || price > 1000)) {
       return res.status(400).json({
         success: false,
@@ -332,7 +336,7 @@ app.delete('/comics/:id', async (req, res) => {
   }
 });
 
-// Graceful shutdown
+// Graceful shutdown handler
 process.on('SIGINT', async () => {
   console.log('Gracefully shutting down...');
   await mongoose.connection.close();
