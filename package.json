@@ -1,13 +1,12 @@
 {
   "name": "uteq-devops-assessment",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "UTEQ DevOps assessment: Complete CI/CD pipeline with Docker, GitHub Actions & GCP deployment",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "devops",
@@ -22,6 +21,15 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.17.1"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "forceExit": true
   }
 }

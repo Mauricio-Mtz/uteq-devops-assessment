@@ -37,7 +37,7 @@ jobs:
     
     - name: Run tests
       run: |
-        npm test || echo "No tests found - skipping"
+        npm test -- --forceExit
     
     - name: Lint code
       run: |
